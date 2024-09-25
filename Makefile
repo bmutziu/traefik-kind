@@ -1,4 +1,4 @@
-CLUSTER_NAME=traefik
+CLUSTER_NAME=gptscript
 TRAEFIK_NAMESPACE=traefik
 APP_NAMESPACE=default
 
@@ -13,6 +13,9 @@ deploy:
 	@TRAEFIK_NAMESPACE=$(TRAEFIK_NAMESPACE) \
 	APP_NAMESPACE=$(APP_NAMESPACE) \
 	./deploy.sh
+
+app:
+	@./app.sh
 
 .PHONY: cleanup
 # cleanup deletes the kind cluster

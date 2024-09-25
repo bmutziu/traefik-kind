@@ -1,0 +1,75 @@
+tools: sys.write, kubectl, helm, browser, sys.http.html2text, sys.exec
+
+do not make parallel function calls. Only call one function at a time.
+Perform the following tasks in order:
+ 
+0. In the current directory create a KIND Cluster file called kind-config.yaml that should be ingress ready for the node with role control-plane, have extra Port Mappings 80, 8080 and 443 (all TCP) for the same node mentioned previously and also have two extra roles called worker.
+
+0.1 Skip steps 1-5 and continue from 6.
+
+1. Identify from https://doc.traefik.io/traefik/getting-started/quick-start-with-kubernetes/ all the yaml files, e.g. 00-role.yml, and copy them into the traefik.new subdirectory, only if all these yaml files are not already there. Also, make sure that all the whoami related yaml resources are downloaded.
+
+2. Add as a metadata entry for 00-account.yml the line 'namespace: ${TRAEFIK_NAMESPACE}'
+
+3. Add for the 'subjects' object section in the 01-role-binding.yml the same line.
+
+4. Add as a metadata entries for 02-traefik-services.yml the line 'namespace: ${TRAEFIK_NAMESPACE}'. Also substitute there LoadBalancer strings with NodePort.
+
+5. Do the metadata entry routine also for ./02-traefik.yml. Add for both spec.template.spec.containers.ports elements a hostPort line with the same numerical port.
+  Also add here as an entry in the spec.template.spec the object:
+    nodeSelector:
+      ingress-ready: "true"
+  To finish this step, add in the same place the object 'tolerations:' with the following keys:
+    - key: "node-role.kubernetes.io/control-plane"
+    - key: "node-role.kubernetes.io/master"
+  both using the Equal operator and NoSchedule effect.
+
+6. Check if the current kubernetes context is kind-gptscript. If not, use again the directory in which this file resides and execute the build step from the Makefile for installing the KIND Cluster.
+
+7. Similarly, execute the deploy step in order to install the Traefik Ingress Controller.
+
+8. Use a single command to wait for all the Pods in the Traefik namespace to be ready, using a 300 seconds timeout.
+
+9. Execute the app step in order to install the whoami application.
+
+10. Make sure the Whoami Pod is in running status.
+
+11. Open in browser the external URL for the Whoami application. Hint: take a look at the hostPort configuration for the KIND Cluster.
+
+12. Finally execute the cleanup step.
+
+---
+name: kubectl
+tools: sys.exec
+description: use kubectl command to manage k8s resources
+args: command: the command kubectl needs to run
+ 
+You are a kubernetes operator which can run kubectl commands to manage clusters and applications
+The only reason you use sys.exec tool must be to use kubectl to run the command provided, this command must start with kubectl
+ 
+---
+name: helm
+tools: sys.exec
+description: use helm command to manage k8s charts
+args: command: the command helm needs to run
+ 
+You are a kubernetes operator which can run helm commands to manage charts
+The only reason you use sys.exec tool must be to use helm to run the command provided, this command must start with helm
+
+---
+name: kind
+tools: sys.exec
+description: use kind command to manage k8s clusters
+args: command: the command kind needs to run
+ 
+You are a kubernetes operator which can run kind commands to manage clusters
+The only reason you use sys.exec tool must be to use kind to run the command provided, this command must start with kind
+ 
+---
+name: browser
+tools: sys.exec
+args: url: the url to open
+description: open a browser window
+ 
+You are only in charge of opening a browser window on the requested url
+You can only use the sys.exec tool to open a browser window
