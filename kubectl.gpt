@@ -5,9 +5,9 @@ Perform the following tasks in order:
  
 0. In the current directory create a KIND Cluster file called kind-config.yaml that should be ingress ready for the node with role control-plane, have extra Port Mappings 80, 8080 and 443 (all TCP) for the same node mentioned previously and also have two extra roles called worker.
 
-0.1 Skip steps 1-5 and continue from 6.
-
-1. Identify from https://doc.traefik.io/traefik/getting-started/quick-start-with-kubernetes/ all the yaml files, e.g. 00-role.yml, and copy them into the traefik.new subdirectory, only if all these yaml files are not already there. Also, make sure that all the whoami related yaml resources are downloaded.
+1. Identify from https://doc.traefik.io/traefik/getting-started/quick-start-with-kubernetes/ all the yaml files, e.g. 00-role.yml.
+Then make a comparison with the files already present in the traefik.new subdirectory and copy from the above-mentioned url only the missing ones.
+Do no forget to add all the whoami related resources.
 
 2. Add as a metadata entry for 00-account.yml the line 'namespace: ${TRAEFIK_NAMESPACE}'
 
