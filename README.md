@@ -4,7 +4,7 @@ This repository has the required configuration files to run Traefik over kind.
 
 The manifests for traefik are mainly inspired in [this guide](https://doc.traefik.io/traefik/getting-started/quick-start-with-kubernetes/) however some tweaks have been added to be able to expose the ingress to the host network when using kind in mac/windows (based on [this guide](https://kind.sigs.k8s.io/docs/user/ingress/)).
 
-## Getting started
+## Getting started already
 
 First we will create a kind cluster by running `make build`.
 
